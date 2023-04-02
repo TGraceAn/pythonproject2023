@@ -13,6 +13,8 @@ class Category(Frame):
         super().__init__(master)
         #a list to delete data later
         self.del_data = []
+        self.list_add_data = []
+        self.list_repair_data = []
 
     def config(self, data, table):
         self.colnames, result = data
@@ -36,12 +38,14 @@ class Category(Frame):
 
         self.alert = Label(self.infoframe, text="")
         self.alert.pack(side=LEFT)
+        
 
     def add_handle(self,colnames):
-        self.add_win = AddWindow("Add")
+        self.add_win = AddWindow("Add", False)
         self.add_win.add_widget(colnames)
         self.add_win.set_table(self.table)
         self.add_win.set_alert(self.alert)
+        self.list_add_data.append(self.add_win.data_update)
 
     def show_handle(self):
         details = self.table.select_values
@@ -50,11 +54,11 @@ class Category(Frame):
         
     def repair_handle(self):
         details = self.table.select_values
-        self.repair_win = AddWindow("Repair")
+        self.repair_win = AddWindow("Repair", True)
         self.repair_win.add_widget(self.colnames)
         self.repair_win.set_table(self.table)
-        self.repair_win.change2repair()
         self.repair_win.insert_data(details)
+        self.list_repair_data.append(self.repair_win.data_update)
         #set alert to repair_win
 
     def delete_handle(self):
@@ -69,10 +73,10 @@ class Category(Frame):
     def apply_handle(self):
         #add
         try: 
-            list_data = self.add_win.data_update
+            list_data = self.list_add_data
             table = self.add_win.table.name
-            for data in list_data:
-                    temp_tuple = tuple(data.values())
+            for data in range(len(list_data)):
+                    temp_tuple = tuple(list_data[data].values())
                     for i in range(len(temp_tuple)):
                         try:
                             temp_tuple[i] = int(temp_tuple[i])
@@ -86,10 +90,10 @@ class Category(Frame):
 
         #edit
         try:
-            list_data = self.repair_win.data_update
+            list_data = self.list_repair_data
             table = self.repair_win.table.name    
-            for data in list_data:
-                    temp_tuple = tuple(data.values())
+            for data in range(len(list_data)):
+                    temp_tuple = tuple(list_data[data].values())
                     for i in range(len(temp_tuple)):
                         try:
                             temp_tuple[i] = int(temp_tuple[i])
@@ -97,9 +101,10 @@ class Category(Frame):
                             pass
                         else:
                             temp_tuple[i] = str(temp_tuple[i])
-                    update_one(table,self.colnames ,temp_tuple)
+                    update_one(table, self.colnames, temp_tuple)
         except:
             pass
+
 
 
         #del
@@ -142,7 +147,7 @@ class AnimalCategory(Category):
         button = Button(frame, text="Add", command=partial(self.add_feeding,colnames)).pack()  
 
     def add_feeding(self,cols):
-        self.add_feeding_win = AddWindow("Add")
+        self.add_feeding_win = AddWindow("Add", False)
         self.add_feeding_win.add_widget(cols)
         # self.add_feeding_win.set_table(self.table)
 
@@ -158,14 +163,14 @@ class EmployeeCategory(Category):
 
     def add_zookeeper(self):
         colnames = get_col_zookeeper()
-        self.add_zookeeper_win = AddWindow("Add Zookeeper")
+        self.add_zookeeper_win = AddWindow("Add Zookeeper", False)
         self.add_zookeeper_win.add_widget(colnames)
         self.add_zookeeper_win.set_table(Table(None,colnames,'ZOOKEEPER'))
         self.add_zookeeper_win.set_alert(self.alert)
 
     def add_ostaff(self):
         colnames = get_col_ostaff()
-        self.add_ostaff_win = AddWindow("Add Ostaff")
+        self.add_ostaff_win = AddWindow("Add Ostaff", False)
         self.add_ostaff_win.add_widget(colnames)
         self.add_ostaff_win.set_table(Table(None,colnames,'OSTAFF'))
         self.add_ostaff_win.set_alert(self.alert)
