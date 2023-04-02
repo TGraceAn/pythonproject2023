@@ -85,18 +85,21 @@ class Category(Frame):
             pass
 
         #edit
-        list_data = self.repair_win.data_update
-        table = self.repair_win.table.name    
-        for data in list_data:
-                temp_tuple = tuple(data.values())
-                for i in range(len(temp_tuple)):
-                    try:
-                        temp_tuple[i] = int(temp_tuple[i])
-                    except:
-                        pass
-                    else:
-                        temp_tuple[i] = str(temp_tuple[i])
-                update_one(table,self.colnames ,temp_tuple)
+        try:
+            list_data = self.repair_win.data_update
+            table = self.repair_win.table.name    
+            for data in list_data:
+                    temp_tuple = tuple(data.values())
+                    for i in range(len(temp_tuple)):
+                        try:
+                            temp_tuple[i] = int(temp_tuple[i])
+                        except:
+                            pass
+                        else:
+                            temp_tuple[i] = str(temp_tuple[i])
+                    update_one(table,self.colnames ,temp_tuple)
+        except:
+            pass
 
 
         #del
