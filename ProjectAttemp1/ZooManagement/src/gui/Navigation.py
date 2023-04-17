@@ -1,6 +1,6 @@
 from tkinter import *
 from functools import partial
-import os
+import threading
 
 class Navigation(Frame):
     def __init__(self, master, navs, details):

@@ -1,5 +1,7 @@
 from tkinter import *
 from src import *
+import time
+# import threading
 
 #create a list for navigation
 navs = ["Home","Person Details", "Animals Details", "Employee Details", "Visitor Details", "Exhibit"]
@@ -66,4 +68,6 @@ class Management:
 if __name__ == "__main__":
     window = Tk()
     app = Management(window, navs)
+    # print(threading.active_count())
+    # print(threading.enumerate())
     window.mainloop()

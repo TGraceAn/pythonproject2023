@@ -45,7 +45,10 @@ class Category(Frame):
         self.add_win.add_widget(colnames)
         self.add_win.set_table(self.table)
         self.add_win.set_alert(self.alert)
-        self.list_add_data.append(self.add_win.data_update)
+        try:
+            self.list_add_data.append(self.add_win.data_update)
+        except:
+            pass
 
     def show_handle(self):
         details = self.table.select_values
@@ -58,7 +61,10 @@ class Category(Frame):
         self.repair_win.add_widget(self.colnames)
         self.repair_win.set_table(self.table)
         self.repair_win.insert_data(details)
-        self.list_repair_data.append(self.repair_win.data_update)
+        try:
+            self.list_repair_data.append(self.repair_win.data_update)
+        except:
+            pass
         #set alert to repair_win
 
     def delete_handle(self):
@@ -86,7 +92,7 @@ class Category(Frame):
                             temp_tuple[i] = str(temp_tuple[i])
                     insert_one(table, temp_tuple)
         except:
-            pass
+            print("There's a problem with adding")
 
         #edit
         try:
@@ -103,8 +109,7 @@ class Category(Frame):
                             temp_tuple[i] = str(temp_tuple[i])
                     update_one(table, self.colnames, temp_tuple)
         except:
-            pass
-
+            print("There's a problem with editting")
 
 
         #del
@@ -114,7 +119,7 @@ class Category(Frame):
             for data in list_data:
                 del_one(data[0], data[1], data[2])
         except:
-            pass
+            print("There's a problem with deleting")
         self.alert.config(text = "Apply done!!!")
 
 
@@ -167,6 +172,19 @@ class EmployeeCategory(Category):
         self.add_zookeeper_win.add_widget(colnames)
         self.add_zookeeper_win.set_table(Table(None,colnames,'ZOOKEEPER'))
         self.add_zookeeper_win.set_alert(self.alert)
+        try:
+            data = self.add_zookeeper_win.data_update
+            temp_tuple = tuple(data.values())
+            for i in range(len(temp_tuple)):
+                try:
+                    temp_tuple[i] = int(temp_tuple[i])
+                except:
+                    pass
+                else:
+                    temp_tuple[i] = str(temp_tuple[i])
+            insert_one('ZOOKEEPER', temp_tuple)
+        except:
+            pass
 
     def add_ostaff(self):
         colnames = get_col_ostaff()
@@ -174,6 +192,19 @@ class EmployeeCategory(Category):
         self.add_ostaff_win.add_widget(colnames)
         self.add_ostaff_win.set_table(Table(None,colnames,'OSTAFF'))
         self.add_ostaff_win.set_alert(self.alert)
+        try:
+            data = self.add_ostaff_win.data_update
+            temp_tuple = tuple(data.values())
+            for i in range(len(temp_tuple)):
+                try:
+                    temp_tuple[i] = int(temp_tuple[i])
+                except:
+                    pass
+                else:
+                    temp_tuple[i] = str(temp_tuple[i])
+            insert_one('OSTAFF', temp_tuple)
+        except:
+            pass
 
     def Ostaff(self):
         top = Toplevel()
@@ -184,8 +215,8 @@ class EmployeeCategory(Category):
         top_table.pack(side="top")
         frame = Frame(top)
         frame.pack(side="bottom")
-        button = Button(frame, text="Add_Ostaff", command=partial(self.add_ostaff)).pack()    
-        button = Button(frame, text="Apply", command=partial(self.apply_handle)).pack()   
+        button = Button(frame, text="Add_Ostaff", command=partial(self.add_ostaff)).pack() 
+
     def Zookeeper(self):
         top = Toplevel()
         top.title("Zookeeper Info")
@@ -197,7 +228,6 @@ class EmployeeCategory(Category):
         frame.pack(side="bottom")
         button = Button(frame, text="Zskills", command=partial(self.Zskills)).pack()
         button = Button(frame, text="Add_Zookeeper", command=partial(self.add_zookeeper)).pack()
-        button = Button(frame, text="Apply", command=partial(self.apply_handle)).pack()  
 
     def Zskills(self):
         top = Toplevel()
@@ -222,3 +252,5 @@ class VisitorCategory(Category):
         top_table = Table(top, colnames, None)
         top_table.add_list_data(colnames, result)
         top_table.pack(side="top")
+
+#TODO: Fix apply for Zookeeper and Ostaff
